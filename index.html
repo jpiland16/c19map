@@ -325,7 +325,7 @@
 		//var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
   		var cors_api_url = "";
 		function doCORSRequest(options, printResult) {
-   		var x = new XMLHttpRequest();
+   			var x = new XMLHttpRequest();
     		x.open(options.method, cors_api_url + options.url);
    			x.onload = x.onerror = function() { printResult(
     	   		//options.method + ' ' + options.url + '\n' +
@@ -462,7 +462,7 @@
 		}
 				
 		function bodyLoaded() {
-			console.log("Note...data from \"New York City\" has been split half-and-half between the counties of Kings and Queens.")
+			//console.log("Note...data from \"New York City\" has been split half-and-half between the counties of Kings and Queens.")
 			
 			for(var i = 0; i < waitBtns.length; i++) {
 				document.getElementById(waitBtns[i]).disabled = true;	
@@ -478,7 +478,7 @@
 					var currentState = ""; //(As in North Carolina)
 					JHUdata = data.split("\n");
 					var length = JHUdata.length - 1; //last line is blank
-					length = 3225; //Actually - line 3225 is the last "county" listing.
+					//length = 3225; //Actually - line 3225 is the last "county" listing.
 					for(var i = 0; i < length; i++) {
 						coronaData[i] = [];
 						coronaData[i] = JHUdata[i].split(",")
@@ -519,9 +519,9 @@
 					}
 
 					//Halve and share the NYC data b/w Kings and Queens
-					countyByState["New York"]["New York City"] = divide(countyByState["New York"]["New York City"],2);
-					countyByState["New York"]["Queens"] = countyByState["New York"]["New York City"];
-					countyByState["New York"]["Kings"] = countyByState["New York"]["New York City"];
+					//countyByState["New York"]["New York City"] = divide(countyByState["New York"]["New York City"],2);
+					//countyByState["New York"]["Queens"] = countyByState["New York"]["New York City"];
+					//countyByState["New York"]["Kings"] = countyByState["New York"]["New York City"];
 
 					var lastIndex = coronaData[0].length - 1;
 					var mostRecentUpdate = coronaData[0][lastIndex];
@@ -563,7 +563,7 @@
 			var newArray = [];
 			var ctyPop;
             var countyPopData;
-            if(uniqueID.length == 2) {
+            if(uniqueID && uniqueID.length == 2) {
                 var countyNdx = usStatePopIndexMapping[uniqueID];
                 countyPopData = usStatePopData[countyNdx]
             } else {
@@ -1242,6 +1242,8 @@
 
 							if(foundMatch) break;
 
+							//if(ctyName.match("Unassigned") != -1 || ctyName.match("Out of") != -1) break;
+
                     	}
 					
                     	if(!foundMatch) {
@@ -1276,7 +1278,7 @@
             var numPopFailures = 0;
             highestStateValTracker = [];
             var stateNames = Object.getOwnPropertyNames(countyByState);
-            for(var i = 1; i < stateNames.length; i++) {
+            for(var i = 0; i < stateNames.length; i++) {
                 var state = stateNames[i];
                 var stateAbbrev = postalAbbrevs[state];
                 //for (var j = 0; j < countyNames.length; j++) {
@@ -1302,7 +1304,7 @@
                     if(!(usStatePopIndexMapping[stateAbbrev] >= 0)) {
 						//console.log("Matching stuff...")
 					    for(var popNdx = 1; popNdx < usPOPdata.length; popNdx++) {
-					    	if(usStatePopData[popNdx][0] == state) {
+					    	if(usStatePopData[popNdx] && usStatePopData[popNdx][0] == state) {
 					    		usStatePopIndexMapping[stateAbbrev] = popNdx;
 					    		break;
 					    	}
@@ -1315,7 +1317,8 @@
 						myStateCovidData[numMatches] = {};
 						myStateCovidData[numMatches].code = stateAbbrev;
 						myStateCovidData[numMatches].name = state;
-					}
+						console.log("mSCD array index " + numMatches + " is state: " + state)
+					} 
 					if(usePlaceholder) myCovidData[numMatches].value = "No data available -";
 					else myStateCovidData[numMatches].value = lastValue;
                     numMatches++;
