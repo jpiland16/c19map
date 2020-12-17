@@ -1311,7 +1311,7 @@
 					    }
                     }
 
-                    highestStateValTracker[highestStateValTracker.length] = scaleFrozen() ? ctyData[ctyData.length - 1] : ((usePlaceholder) ? (lastValue = 1) : Number(lastValue));
+                    highestStateValTracker[highestStateValTracker.length] = scaleFrozen() ? (state != "US" ? ctyData[ctyData.length - 1] : 0) : ((usePlaceholder) ? (lastValue = 1) : Number(lastValue));
 					
                     if(!myStateCovidData[numMatches]) { 
 						myStateCovidData[numMatches] = {};
